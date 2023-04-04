@@ -1,4 +1,7 @@
 pandas
 numpy
 seaborn
+pymongo[srv]
+certifi
+python-dotenv
 -e .
