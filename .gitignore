@@ -129,5 +129,12 @@ dmypy.json
 .pyre/
 
 
-#jupyter
+#jupyternotebook
 demo.ipynb
+
+#flowcharts
+flowcharts
+
+#artifacts
+logs
+sensor_fault_artifact

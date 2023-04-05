@@ -22,6 +22,7 @@ from src.exception import CustomException
 from src.logger import logger
 from src.utils import SensorData
 from datetime import datetime
+from src.constant.training_pipeline_config.data_validation import SCHEMA_FILE_PATH
 
 DownloadUrl = namedtuple("DownloadUrl", ["url", "file_path" ])
 
@@ -36,9 +37,11 @@ class DataIngestion:
         """
         try:
             logger.info(f"{'>>' * 20}Starting data ingestion.{'<<' * 20}")
+            self.sensor_data= SensorData()
             self.data_ingestion_config = data_ingestion_config
             self.failed_download_urls: List[DownloadUrl] = []
-            
+            self._schema_config= self.sensor_data.read_yaml_file(SCHEMA_FILE_PATH)
+            #dataframe = dataframe.drop(self._schema_config["drop_columns"],axis=1)
 
         except Exception as e:
             raise CustomException(e, sys)
@@ -85,14 +88,15 @@ class DataIngestion:
             output_file_name = self.data_ingestion_config.file_name
             os.makedirs(data_dir, exist_ok=True)
             file_path = os.path.join(data_dir, f"{output_file_name}")
-            logger.info(f"Parquet file will be created at: {file_path}")
+            logger.info(f"CSV file will be created at: {file_path}")
             if not os.path.exists(csv_data_dir):
                 return file_path
             for file_name in os.listdir(csv_data_dir):
                 csv_file_path = os.path.join(csv_data_dir, file_name)
-                logger.debug(f"Converting {csv_file_path} into parquet format at {file_path}")
+                logger.debug(f"Converting {csv_file_path} into CSV format at {file_path}")
                 df = pd.read_csv(csv_file_path)
                 if len(df) > 0:
+                    df = df.drop(self._schema_config["drop_columns"],axis=1)
                     df.to_csv(file_path, index=False)
 
             return file_path

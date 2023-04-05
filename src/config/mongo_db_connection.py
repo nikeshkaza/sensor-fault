@@ -11,7 +11,7 @@ class MongoDBClient:
 
             if MongoDBClient.client is None:
                 mongo_db_url = DATA_INGESTION_DATA_SOURCE_URL
-                print(mongo_db_url)
+                #print(mongo_db_url)
                 if "localhost" in mongo_db_url:
                     MongoDBClient.client = pymongo.MongoClient(mongo_db_url) 
                 else:

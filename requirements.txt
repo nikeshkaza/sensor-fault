@@ -4,4 +4,5 @@ seaborn
 pymongo[srv]
 certifi
 python-dotenv
+pyyaml
 -e .
