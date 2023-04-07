@@ -1,5 +1,5 @@
 from distutils import dir_util
-from src.constant.training_pipeline_config.data_validation import SCHEMA_FILE_PATH
+from src.constant.training_pipeline_config import SCHEMA_FILE_PATH
 from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
 from src.entity.config_entity import DataValidationConfig
 from src.exception import CustomException

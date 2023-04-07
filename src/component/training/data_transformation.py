@@ -19,6 +19,7 @@ from src.exception import CustomException
 from src.logger import logger
 from src.ml.model.estimator import TargetValueMapping
 from src.utils import SensorData
+from src.constant.training_pipeline_config import TARGET_COLUMN
 
 
 
@@ -70,7 +71,7 @@ class DataTransformation:
         try:
             filepath=self.data_validation_artifact.accepted_file_path
             df = DataTransformation.read_data(file_path=filepath)
-            train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+            train_df, test_df = train_test_split(df, test_size=DATA_TRANSFORMATION_TEST_SIZE, random_state=42)
             #train_df = DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path)
             #test_df = DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
             preprocessor = self.get_data_transformer_object()

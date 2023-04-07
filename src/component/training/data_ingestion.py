@@ -22,10 +22,10 @@ from src.exception import CustomException
 from src.logger import logger
 from src.utils import SensorData
 from datetime import datetime
-from src.constant.training_pipeline_config.data_validation import SCHEMA_FILE_PATH
+from src.constant.training_pipeline_config import SCHEMA_FILE_PATH
+
 
 DownloadUrl = namedtuple("DownloadUrl", ["url", "file_path" ])
-
 
 class DataIngestion:
     # Used to download data in chunks.
@@ -116,7 +116,7 @@ class DataIngestion:
             self.export_data_into_download_dir()
             
             if os.path.exists(self.data_ingestion_config.download_dir):
-                logger.info(f"Converting and combining downloaded json into csv file")
+                logger.info(f"Converting and combining downloaded json into CSV file")
                 self.move_file_to_feature_store()
                 
 
