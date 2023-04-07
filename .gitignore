@@ -138,3 +138,6 @@ flowcharts
 #artifacts
 logs
 sensor_fault_artifact
+
+#notebook
+notebook

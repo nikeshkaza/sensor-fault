@@ -110,13 +110,13 @@ class DataIngestion:
 
     def initiate_data_ingestion(self) -> DataIngestionArtifact:
         try:
-            logger.info(f"Started downloading json file")
+            logger.info(f"Started downloading json file to csv")
             
 
             self.export_data_into_download_dir()
             
             if os.path.exists(self.data_ingestion_config.download_dir):
-                logger.info(f"Converting and combining downloaded json into parquet file")
+                logger.info(f"Converting and combining downloaded json into csv file")
                 self.move_file_to_feature_store()
                 
 

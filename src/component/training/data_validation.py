@@ -14,6 +14,7 @@ class DataValidation:
     def __init__(self,data_ingestion_artifact:DataIngestionArtifact,
                         data_validation_config:DataValidationConfig):
         try:
+            logger.info(f"{'>>' * 20}Starting data validation.{'<<' * 20}")
             self.sensor_data= SensorData()
             self.data_ingestion_artifact=data_ingestion_artifact
             self.data_validation_config=data_validation_config
@@ -105,7 +106,7 @@ class DataValidation:
             #Validate number of columns
             status = self.validate_number_of_columns(dataframe=dataframe)
             if not status:
-                error_message=f"{error_message}Train dataframe does not contain all columns.\n"
+                error_message=f"{error_message} dataframe does not contain all columns.\n"
             
         
 
@@ -113,7 +114,7 @@ class DataValidation:
 
             status = self.is_numerical_column_exist(dataframe=dataframe)
             if not status:
-                error_message=f"{error_message}Train dataframe does not contain all numerical columns.\n"
+                error_message=f"{error_message} dataframe does not contain all numerical columns.\n"
             
             
             if len(error_message)>0:

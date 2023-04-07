@@ -2,7 +2,8 @@ from src.config.pipeline.training import SensorConfig
 from src.exception import CustomException
 from src.component.training.data_ingestion import DataIngestion
 from src.component.training.data_validation import DataValidation
-from src.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
+from src.component.training.data_transformation import DataTransformation
+from src.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact,DataTransformationArtifact
 #from constant.s3bucket import TRAINING_BUCKET_NAME,TRAINING_LOG_NAME
 from src.constant import TIMESTAMP
 from src.logger import LOG_FILE_PATH,LOG_DIR
@@ -35,11 +36,25 @@ class TrainingPipeline:
             return data_validation_artifact
         except Exception as e:
             raise CustomException(e, sys)
+        
+    def start_data_transformation(self, data_validation_artifact: DataValidationArtifact) -> DataTransformationArtifact:
+        try:
+            data_transformation_config = self.sensor_config.get_data_transformation_config()
+            data_transformation = DataTransformation(data_validation_artifact=data_validation_artifact,
+                                                     data_transformation_config=data_transformation_config
+
+                                                     )
+            data_transformation_artifact = data_transformation.initiate_data_transformation()
+            return data_transformation_artifact
+        except Exception as e:
+            raise CustomException(e, sys)
 
     def start(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(
+                data_validation_artifact=data_validation_artifact)
             
         except Exception as e:
             raise CustomException(e, sys)

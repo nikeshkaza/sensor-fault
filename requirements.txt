@@ -5,4 +5,8 @@ pymongo[srv]
 certifi
 python-dotenv
 pyyaml
+scikit-learn==1.1.3
+imblearn==0.0
+dill
+xgboost
 -e .

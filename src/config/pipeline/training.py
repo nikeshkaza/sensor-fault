@@ -3,9 +3,10 @@ from src.exception import CustomException
 from src.logger import logger
 from src.constant.training_pipeline_config import PIPELINE_NAME,PIPELINE_ARTIFACT_DIR
 from src.constant import TIMESTAMP
-from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
+from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig
 from src.constant.training_pipeline_config.data_ingestion import *
 from src.constant.training_pipeline_config.data_validation import *
+from src.constant.training_pipeline_config.data_transformation import *
 
 
 class SensorConfig:
@@ -85,5 +86,33 @@ class SensorConfig:
             logger.info(f"Data preprocessing config: {data_preprocessing_config}")
 
             return data_preprocessing_config
+        except Exception as e:
+            raise CustomException(e, sys)
+        
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        try:
+            data_transformation_dir = os.path.join(self.pipeline_config.artifact_dir,
+                                                   DATA_TRANSFORMATION_DIR, self.timestamp)
+
+            transformed_train_data_dir = os.path.join(
+                data_transformation_dir, DATA_TRANSFORMATION_TRAIN_DIR
+            )
+            transformed_test_data_dir = os.path.join(
+                data_transformation_dir, DATA_TRANSFORMATION_TEST_DIR
+            )
+
+            export_pipeline_dir = os.path.join(
+                data_transformation_dir, DATA_TRANSFORMATION_PIPELINE_DIR
+            )
+            data_transformation_config = DataTransformationConfig(
+                export_pipeline_dir=export_pipeline_dir,
+                transformed_test_dir=transformed_test_data_dir,
+                transformed_train_dir=transformed_train_data_dir,
+                file_name=DATA_TRANSFORMATION_FILE_NAME,
+                test_size=DATA_TRANSFORMATION_TEST_SIZE,
+            )
+
+            logger.info(f"Data transformation config: {data_transformation_config}")
+            return data_transformation_config
         except Exception as e:
             raise CustomException(e, sys)
