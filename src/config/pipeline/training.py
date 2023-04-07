@@ -3,10 +3,11 @@ from src.exception import CustomException
 from src.logger import logger
 from src.constant.training_pipeline_config import PIPELINE_NAME,PIPELINE_ARTIFACT_DIR
 from src.constant import TIMESTAMP
-from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig
+from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig, ModelTrainerConfig
 from src.constant.training_pipeline_config.data_ingestion import *
 from src.constant.training_pipeline_config.data_validation import *
 from src.constant.training_pipeline_config.data_transformation import *
+from src.constant.training_pipeline_config.model_trainer import *
 
 
 class SensorConfig:
@@ -102,7 +103,7 @@ class SensorConfig:
             )
 
             export_pipeline_dir = os.path.join(
-                data_transformation_dir, DATA_TRANSFORMATION_PIPELINE_DIR
+                data_transformation_dir, DATA_TRANSFORMATION_PIPELINE_DIR, DATA_TRANSFORMATION_FILE_NAME
             )
             data_transformation_config = DataTransformationConfig(
                 export_pipeline_dir=export_pipeline_dir,
@@ -114,5 +115,22 @@ class SensorConfig:
 
             logger.info(f"Data transformation config: {data_transformation_config}")
             return data_transformation_config
+        except Exception as e:
+            raise CustomException(e, sys)
+        
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        try:
+            model_trainer_dir = os.path.join(self.pipeline_config.artifact_dir,
+                                             MODEL_TRAINER_DIR, self.timestamp)
+            trained_model_file_path = os.path.join(
+                model_trainer_dir, MODEL_TRAINER_TRAINED_MODEL_DIR, MODEL_TRAINER_MODEL_NAME
+            )
+            
+            model_trainer_config = ModelTrainerConfig(base_accuracy=MODEL_TRAINER_BASE_ACCURACY,
+                                                      trained_model_file_path=trained_model_file_path,
+                                                      metric_list=MODEL_TRAINER_MODEL_METRIC_NAMES
+                                                      )
+            logger.info(f"Model trainer config: {model_trainer_config}")
+            return model_trainer_config
         except Exception as e:
             raise CustomException(e, sys)

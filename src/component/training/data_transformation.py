@@ -33,6 +33,7 @@ class DataTransformation:
         :param data_transformation_config: configuration for data transformation
         """
         try:
+            logger.info(f"{'>>' * 20}Starting data transformation.{'<<' * 20}")
             self.sensor_data=SensorData()
             self.data_validation_artifact = data_validation_artifact
             self.data_transformation_config = data_transformation_config
