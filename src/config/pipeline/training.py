@@ -3,11 +3,14 @@ from src.exception import CustomException
 from src.logger import logger
 from src.constant.training_pipeline_config import PIPELINE_NAME,PIPELINE_ARTIFACT_DIR
 from src.constant import TIMESTAMP
-from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig, ModelTrainerConfig
+from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig, ModelPusherConfig
 from src.constant.training_pipeline_config.data_ingestion import *
 from src.constant.training_pipeline_config.data_validation import *
 from src.constant.training_pipeline_config.data_transformation import *
 from src.constant.training_pipeline_config.model_trainer import *
+from src.constant.training_pipeline_config.model_evaluation import *
+from src.constant.training_pipeline_config.model_pusher import *
+from src.config.azure_connection_config import CONTAINER_NAME
 
 
 class SensorConfig:
@@ -133,4 +136,39 @@ class SensorConfig:
             logger.info(f"Model trainer config: {model_trainer_config}")
             return model_trainer_config
         except Exception as e:
+            raise CustomException(e, sys)
+        
+
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        try:
+            model_evaluation_dir = os.path.join(self.pipeline_config.artifact_dir,
+                                                MODEL_EVALUATION_DIR)
+
+            model_evaluation_report_file_path = os.path.join(
+                model_evaluation_dir, MODEL_EVALUATION_REPORT_DIR, MODEL_EVALUATION_REPORT_FILE_NAME
+            )
+
+            model_evaluation_config = ModelEvaluationConfig(
+                container_name=CONTAINER_NAME,
+                model_dir=MODEL_FOLDER,
+                model_evaluation_report_file_path=model_evaluation_report_file_path,
+                threshold=MODEL_EVALUATION_THRESHOLD_VALUE,
+                metric_list=MODEL_EVALUATION_METRIC_NAMES,
+
+            )
+            logger.info(f"Model evaluation config: [{model_evaluation_config}]")
+            return model_evaluation_config
+
+        except Exception as e:
+            raise CustomException(e, sys)
+        
+
+    def get_model_pusher_config(self) -> ModelPusherConfig:
+        try:
+            model_pusher_config = ModelPusherConfig(
+                model_dir=MODEL_PUSHER_DIR,
+            )
+            logger.info(f"Model pusher config: {model_pusher_config}")
+            return model_pusher_config
+        except  Exception as e:
             raise CustomException(e, sys)

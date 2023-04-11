@@ -78,11 +78,11 @@ class ModelTrainer:
 
             preprocessor = self._sensor_config.load_object(file_path=self.data_transformation_artifact.exported_pipeline_file_path)
             
-            model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
-            os.makedirs(model_dir_path,exist_ok=True)
+            model_dir = os.path.dirname(self.model_trainer_config.trained_model_file_path)
+            os.makedirs(model_dir,exist_ok=True)
             sensor_model = SensorModel(preprocessor=preprocessor,model=model)
             self._sensor_config.save_object(self.model_trainer_config.trained_model_file_path, obj=sensor_model)
-
+            model_dir_path=self.model_trainer_config.trained_model_file_path
             model_trainer_artifact = ModelTrainerArtifact(model_trainer_ref_artifact=model_dir_path,
                                                           model_trainer_train_metric_artifact=train_metric_artifact,
                                                           model_trainer_test_metric_artifact=test_metric_artifact)
