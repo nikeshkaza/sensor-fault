@@ -141,3 +141,6 @@ sensor_fault_artifact
 
 #notebook
 notebook
+
+#dockers (temp)
+docker-compose.yaml

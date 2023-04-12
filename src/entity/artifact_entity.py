@@ -14,13 +14,9 @@ DataTransformationArtifact = namedtuple("DataTransformationArtifact",
                                          ])
 
 
-PartialModelTrainerRefArtifact = namedtuple("PartialModelTrainerRefArtifact", ["trained_model_file_path",
-                                                                               "label_indexer_model_file_path"
-                                                                               ])
+PartialModelTrainerRefArtifact = namedtuple("PartialModelTrainerRefArtifact", ["trained_model_file_path"])
 
-PartialModelTrainerMetricArtifact = namedtuple("PartialModelTrainerMetricArtifact", [
-    "f1_score", "precision_score", "recall_score"
-])
+PartialModelTrainerMetricArtifact = namedtuple("PartialModelTrainerMetricArtifact", ["f1_score", "precision_score", "recall_score"])
 
 class ModelTrainerArtifact:
 
