@@ -19,6 +19,7 @@ class ModelEvaluation:
                     model_trainer_artifact:ModelTrainerArtifact):
         
         try:
+            logger.info(f"{'>>' * 20}Starting model evaluation.{'<<' * 20}")
             self.model_eval_config=model_eval_config
             self.data_validation_artifact=data_validation_artifact
             self.model_trainer_artifact=model_trainer_artifact
@@ -40,7 +41,7 @@ class ModelEvaluation:
             y_true.replace(TargetValueMapping().to_dict(),inplace=True)
             df.drop(TARGET_COLUMN,axis=1,inplace=True)
 
-            train_model_file_path = self.model_trainer_artifact.model_trainer_ref_artifact
+            train_model_file_path = self.model_trainer_artifact.model_trainer_ref_artifact.trained_model_file_path
             model_resolver = ModelResolver()
             sensor_data=SensorData()
             is_model_accepted=True

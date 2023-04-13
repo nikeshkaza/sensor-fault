@@ -20,7 +20,8 @@ class ModelPusher:
 
     def push_model(self) -> str:
         try:
-            local_path= self.model_trainer_artifact.model_trainer_ref_artifact
+            logger.info(f"{'>>' * 20}Starting model pusher.{'<<' * 20}")
+            local_path= self.model_trainer_artifact.model_trainer_ref_artifact.trained_model_file_path
             dir_path = os.path.dirname(local_path)
             #dir_path=f'{dir}/'
             model_dir=self.model_pusher_config.model_dir

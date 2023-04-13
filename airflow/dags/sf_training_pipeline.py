@@ -79,7 +79,6 @@ with DAG(
         data_transformation_artifact=DataTransformationArtifact(*(data_transformation_artifact))
 
         model_trainer_artifact=training_pipeline.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
-        print(type(model_trainer_artifact))  # Add this line to debug
         ti.xcom_push('model_trainer_artifact', model_trainer_artifact._asdict())
 
     def model_evaluation(**kwargs):
