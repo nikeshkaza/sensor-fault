@@ -11,3 +11,9 @@ jobs:
       - run:
           name: run unit tests
           command: echo "Running unit tests"
+
+
+workflows:
+  CICD:
+    jobs:
+      - continuous-integration
