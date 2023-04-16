@@ -17,20 +17,20 @@ jobs:
           name: run unit tests
           command: echo "Running unit tests"
   continuous-delivery:
+    docker:
+      - image: cimg/base:stable 
+    resource_class: medium
     steps:
       - checkout
       - setup_remote_docker
-
+      - azure-acr/acr-login:
+          configure-docker-credentials-store: true 
+          registry-name: sensorfaultdocker
       - azure-acr/build-and-push-image:
           login-server-name: sensorfaultdocker.azurecr.io
           registry-name: sensorfaultdocker
-          repo: sensor-repository
+          repo: sensor-fault
           tag: latest
-
-    
-
-
-
 
 workflows:
   CICD:
