@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  azure-acr: circleci/azure-acr@0.2.1
+
 jobs:
   continuous-integration:
     docker:
@@ -14,15 +17,19 @@ jobs:
           name: run unit tests
           command: echo "Running unit tests"
   continuous-delivery:
-    orbs:
-      azure-acr: circleci/azure-acr@0.2.1
     steps:
       - checkout
+      - setup_remote_docker
+
       - azure-acr/build-and-push-image:
           login-server-name: sensorfaultdocker.azurecr.io
           registry-name: sensorfaultdocker
-          repo: sensor-fault
+          repo: sensor-repository
           tag: latest
+
+    
+
+
 
 
 workflows:
