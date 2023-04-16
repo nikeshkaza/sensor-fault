@@ -14,25 +14,15 @@ jobs:
           name: run unit tests
           command: echo "Running unit tests"
   continuous-delivery:
-    docker:
-      - image: docker:latest
-
+    orbs:
+      azure-acr: circleci/azure-acr@0.2.1
     steps:
       - checkout
-      - setup_remote_docker
-      - run:
-          name: Login to Azure Container Registry
-          command: |
-            echo $AZURE_REGISTRY_PASSWORD | docker login $AZURE_REGISTRY_NAME.azurecr.io --username $AZURE_REGISTRY_USERNAME --password-stdin
-      - run:
-          name: Build and tag Docker image
-          command: |
-            docker build -t $AZURE_REGISTRY_NAME.azurecr.io/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
-            docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG $AZURE_REGISTRY_NAME.azurecr.io/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
-      - run:
-          name: Push Docker image to Azure Container Registry
-          command: |
-            docker push $AZURE_REGISTRY_NAME.azurecr.io/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+      - azure-acr/build-and-push-image:
+          login-server-name: sensorfaultdocker.azurecr.io
+          registry-name: sensorfaultdocker
+          repo: sensor-fault
+          tag: latest
 
 
 workflows:
