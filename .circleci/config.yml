@@ -1,0 +1,13 @@
+jobs:
+  continuous-integration:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: lint code
+          command: echo "Linting repository"
+      - run:
+          name: run unit tests
+          command: echo "Running unit tests"
