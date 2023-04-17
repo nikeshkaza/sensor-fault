@@ -21,14 +21,18 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - azure-acr/acr-login:
-          configure-docker-credentials-store: true 
-          registry-name: sensorfaultdocker
-      - azure-acr/build-and-push-image:
-          login-server-name: sensorfaultdocker.azurecr.io
-          registry-name: sensorfaultdocker
-          repo: sensor-fault
-          tag: latest
+      - run:
+          name: Login to Azure Container Registry
+          command: echo $AZURE_REGISTRY_PASSWORD | docker login -u $AZURE_REGISTRY_USERNAME --password-stdin $AZURE_REGISTRY_NAME
+      - run:
+          name: Build and tag docker
+          command: 
+          docker build -t $IMAGE_NAME:$TAG .
+          docker tag $IMAGE_NAME:$TAG $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+      - run:
+          name: push to azure container registry
+          command: docker push $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+
 
 workflows:
   CICD:
