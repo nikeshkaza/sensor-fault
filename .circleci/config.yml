@@ -33,7 +33,13 @@ jobs:
   continuous-deployment:
     machine: true
     resource_class: nikeshkaza/self-hosted
+    environment:
+      MONGO_DB_URL: $MONGO_DB_URL
+      CONNECTION_STRING: $CONNECTION_STRING
+      CONTAINER_NAME: $CONTAINER_NAME
     steps:
+      - checkout
+      
       - run: 
           name: Login to Azure Container Registry
           command: echo $AZURE_REGISTRY_PASSWORD | docker login $AZURE_REGISTRY_NAME.azurecr.io --username $AZURE_REGISTRY_USERNAME --password-stdin
@@ -49,10 +55,13 @@ jobs:
       - run:
           name: free up system space
           command: docker system prune -f
+      - run:
+          name: set env variables
+          command: echo 'export IMAGE_NAME="$AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG"' >> "$BASH_ENV"
 
       - run:
           name: start container
-          command: docker run --name ${IMAGE_NAME} -d -p 80:8080 $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+          command: docker-compose up -d
  
 
 
