@@ -30,21 +30,48 @@ jobs:
       - run:
           name: push to azure container registry
           command: docker push $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
-  runner-test:
+    continuous-deployment:
     machine: true
     resource_class: nikeshkaza/self-hosted
     steps:
-      - run: echo "Hi I'm on Runners!"
+      - run: 
+          name: Login to Azure Container Registry
+          command: echo $AZURE_REGISTRY_PASSWORD | docker login $AZURE_REGISTRY_NAME.azurecr.io --username $AZURE_REGISTRY_USERNAME --password-stdin
+
+      - run:
+          name: pull image from private repository
+          command: docker pull $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+
+      - run:
+          name: Remove Already Running Container
+          command: docker ps -q --filter "name=$IMAGE_NAME" | grep -q . && docker stop $IMAGE_NAME && docker rm -fv $IMAGE_NAME || true
+
+      - run:
+          name: free up system space
+          command: docker system prune -f
+
+      - run:
+          name: start container
+          command: docker run --name ${IMAGE_NAME} -d -p 80:8080 $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+ 
 
 
 workflows:
   CICD:
     jobs:
-      - runner-test
-      - continuous-integration:
-          requires:
-            - runner-test
+      - continuous-integration
 
       - continuous-delivery:
           requires:
             - continuous-integration
+
+      - sanity-check:
+          type: approval
+          requires:
+          - continuous-delivery
+
+      - continuous-deployment:
+          requires:
+            - sanity-check
+            - continuous-integration
+            - continuous-delivery
