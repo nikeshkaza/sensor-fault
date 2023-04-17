@@ -95,3 +95,21 @@ docker-compose down
 
 docker exec sensor_fault airflow dags list
 docker inspect sensor_fault (container_name)
+docker exec sensor_fault ls -l /app/airflow/dags/
+
+docker exec sensor_fault airflow dags show sf_training_pipeline
+
+docker exec sensor_fault /usr/bin/python3 -m compileall /app/airflow/dags
+
+
+docker exec sensor_fault which python3
+
+
+self-hosted=
+7b5392cceeff4689357dfb9def055faa9495ead6d835f77ca4e0106027c0cc97baaf5ca542084888
+
+to login to azurevm (ubuntu)
+commands:
+    - ssh-add sensorvm_key.pem
+    - install azure cli
+    - install docker

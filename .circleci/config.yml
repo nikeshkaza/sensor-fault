@@ -1,7 +1,5 @@
 version: 2.1
 
-orbs:
-  azure-acr: circleci/azure-acr@0.2.1
 
 jobs:
   continuous-integration:
@@ -23,6 +21,9 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - azure-acr/acr-login:
+          configure-docker-credentials-store: true 
+          registry-name: sensorfaultdocker
       - azure-acr/build-and-push-image:
           login-server-name: sensorfaultdocker.azurecr.io
           registry-name: sensorfaultdocker
