@@ -30,12 +30,20 @@ jobs:
       - run:
           name: push to azure container registry
           command: docker push $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
+  runner-test:
+    machine: true
+    resource_class: nikeshkaza/self-hosted
+    steps:
+      - run: echo "Hi I'm on Runners!"
 
 
 workflows:
   CICD:
     jobs:
-      - continuous-integration
+      - runner-test
+      - continuous-integration:
+          requires:
+            - runner-test
 
       - continuous-delivery:
           requires:
