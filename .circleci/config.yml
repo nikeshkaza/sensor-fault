@@ -49,13 +49,6 @@ jobs:
           command: docker pull $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
 
       - run:
-          name: Remove Already Running Container
-          command: docker ps -q --filter "name=$IMAGE_NAME" | grep -q . && docker stop $IMAGE_NAME && docker rm -fv $IMAGE_NAME || true
-
-      - run:
-          name: free up system space
-          command: docker system prune -f
-      - run:
           name: set env variables
           command: echo 'export IMAGE_NAME="$AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG"' >> "$BASH_ENV"
 
