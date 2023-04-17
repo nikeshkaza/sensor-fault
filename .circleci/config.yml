@@ -30,7 +30,7 @@ jobs:
       - run:
           name: push to azure container registry
           command: docker push $AZURE_REGISTRY_NAME.azurecr.io/$IMAGE_NAME:$TAG
-    continuous-deployment:
+  continuous-deployment:
     machine: true
     resource_class: nikeshkaza/self-hosted
     steps:
