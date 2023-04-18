@@ -15,12 +15,10 @@ jobs:
           name: run unit tests
           command: echo "Running unit tests"
   continuous-delivery:
-    docker:
-      - image: cimg/base:stable 
-    resource_class: medium
+    machine: true
+    resource_class: nikeshkaza/self-hosted
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Login to Azure Container Registry
           command: echo $AZURE_REGISTRY_PASSWORD | docker login $AZURE_REGISTRY_NAME.azurecr.io --username $AZURE_REGISTRY_USERNAME --password-stdin
